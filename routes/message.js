@@ -4,21 +4,20 @@ const Message = require('../models/Message');
 
 // const check_auth =require('../middleware/check_auth');
 
-// Submit a Message
+// Submit a Comment
 
-router.post('/PostMessage',  (req, res) => {
+router.post('/PostMessage', (req, res) => {
         
-    var createMessage = new Message ({
+    var createComment = new Message ({
+    
     name: req.body.name,
     email: req.body.email,
     message: req.body.message
+   
     });
-    createMessage.save().then((post)=>{
+    createComment.save().then((post)=>{
         res.send(post) 
        console.log(post)
-       res.status(200).json({
-        message:"Message sent"
-
     });
 });
  /**
@@ -34,19 +33,19 @@ router.post('/PostMessage',  (req, res) => {
  *       type: object
  *       required:
  *         - name
- *         - email
- *         - message
+ *         - comment
+ *         - like
  *         
  *       properties:
  *         
  *         name:
  *           type: string
  *         
- *         email:
+ *         comment:
  *           type: string
  *           
- *         message:
- *           type: string
+ *         like:
+ *           type: number
  *           
  *           
  *         
@@ -55,30 +54,30 @@ router.post('/PostMessage',  (req, res) => {
 /**
   * @swagger
   * tags:
-  *   name:  Message
-  *   description: sending message
+  *   name:  Comment
+  *   description: adding comment on article
   */
 /**
  * @swagger
- * /api/PostMessage:
+ * /api/PostComment:
  *   post:
- *     summary: post a message
+ *     summary: post a comment
  *     security:
  *      - ApiKeyAuth: []
- *     tags: [Message]
+ *     tags: [Comment]
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/Message'
+ *             $ref: '#/components/schemas/Comment'
  *     responses:
  *       200:
- *         description: message sent
+ *         description: acccount created 
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Message'
+ *               $ref: '#/components/schemas/Comment'
  *       500:
  *         description: Some server error
  */
@@ -91,22 +90,22 @@ router.get('/getAllMessage', async (req,res) => {
 });
 /**
  * @swagger
- * /api/getAllMessage:
+ * /api/getAllComment:
  *   get:
- *     summary: return list of all Message
- *     tags: [Message]
+ *     summary: return list of all Comments
+ *     tags: [Comment]
  *     responses:
  *       200:
- *         description: The list of Message
+ *         description: The list of Comments
  *         content:
  *           application/json:
  *             schema:
  *               type: array
  *               items:
- *                 $ref: '#/components/schemas/Message'
+ *                 $ref: '#/components/schemas/Comment'
  */
 
-//get specific cmessage
+//get specific comment
 router.get('/GetOneMessage/:postId', async (req,res)=>{
     const post = await Message.findById(req.params.postId);
     res.json(post)
@@ -114,29 +113,29 @@ router.get('/GetOneMessage/:postId', async (req,res)=>{
    });
     /**
  * @swagger
- * /api/GetOneMessage/{id}:
+ * /api/GetOneComment/{id}:
  *   get:
- *     summary: Message by id
- *     tags: [Message]
+ *     summary: Comment by id
+ *     tags: [Comment]
  *     parameters:
  *       - in: path
  *         name: id
  *         schema:
  *           type: string
  *         required: true
- *         description: The message id
+ *         description: The comment id
  *     responses:
  *       200:
- *         description: Tthi is discription of message by id
+ *         description: Tthi is discription of comment by id
  *         contens:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Message'
+ *               $ref: '#/components/schemas/Comment'
  *       404:
- *         description: The message was not found
+ *         description: The comment was not found
  */
 
-   // delete specific message
+   // delete specific commemt
 
 router.delete ('/DeleteMessage/:postId', async (req,res) =>{
     const post = await Message.deleteOne({_id: req.params.postId});
@@ -145,9 +144,9 @@ router.delete ('/DeleteMessage/:postId', async (req,res) =>{
 });
 /**
  * @swagger
- * /api/DeleteMessage/{id}:
+ * /api/DeleteComment/{id}:
  *   delete:
- *     summary: remove Message 
+ *     summary: remove Comment 
  *     security:
  *      - ApiKeyAuth: []
  *     tags: [Comment]
@@ -157,13 +156,13 @@ router.delete ('/DeleteMessage/:postId', async (req,res) =>{
  *         schema:
  *           type: string
  *         required: true
- *         description: The message id
+ *         description: The comment id
  * 
  *     responses:
  *       200:
- *         description: The message was deleted
+ *         description: The comment was deleted
  *       404:
- *         description: The message was not found
+ *         description: The comment was not found
  */
 
 module.exports = router
